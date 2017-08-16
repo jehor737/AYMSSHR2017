@@ -1,3 +1,12 @@
-startuml
-  
-enduml
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+  actor Osbert
+  actor cliente
+  rectangle "Sistema de compra \ny venta de obras de arte"{
+    Osbert -- (comprar obras)
+    Osbert --(vender obras)
+    Osbert -- (reportes)
+    (vender obras) -- cliente
+  }
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+Class Compra{
+  -String Vendedor
+  -String Direccion
+  -float Precio_de_compra
+  +void generarReporte()
+  +void calcularPrecio()
+}
+Class Venta{
+  -String Comprador
+  -String Direccion
+  +float Precio_de_venta
+
+}
+Class Obra{
+  +String Tipo
+  +String Nombre
+  +String Descripcion
+  +float Precio
+
+}
+Class Almacen{
+  -Obra obras[]
+  agregarObra()
+  quitarObra()
+
+}
+Class Cliente{
+  -String Nombre
+  -String Direccion
+}
+Class Vendedor{
+  -int ID
+  -String Nombre
+  -String Direccion
+  -Bool AceptaOferta
+  
+}
+
+Almacen*--Obra: guarda
+Cliente -- Venta: adquiere
+Vendedor-- Compra:negocia
+Compra --o Almacen: recibe
+Venta --o Almacen: da
+
+@enduml
