@@ -1,0 +1,19 @@
+@startuml
+Class Creator{
+  -createProduct(int type)
+  +Product* factoryMethod(int type)
+}
+
+Class Product{
+  +operation()
+  +operation2()
+}
+
+Class CreatorA{
+  +Product * createProduct(int type)
+}
+
+Creator <|.. CreatorA
+CreatorA -- Product : regresa
+
+@enduml
