@@ -1,0 +1,65 @@
+@startuml
+abstract Class Computadora{
+  #string modelo;
+  #Computadora()=default;
+  +virtual Computadora * clonarComputador()
+  +void eleccionDeComponentes()
+  +void ensambladoDeComponentes()
+  +void instalacionConfiguracioncSoftware()
+  +void empaquetarComputador()
+  +virtual ~Computadora()
+}
+
+Class CreadorComputadora{
+  +static CreadorComputadora * getComputadora()
+  +<<template>> static Comp * crearComputador()
+  -CreadorComputadora()
+  #static CreadorComputadora * computadora
+}
+
+Class Clonar{
+  +Computadora * clonarComputador()
+  #Clonar()
+}
+Class Desktop{
+  +void desk()
+  -Desktop()
+}
+
+Class Laptop{
+  +void lap()
+  -Laptop()
+}
+
+Class Netbook{
+  -Netbook()
+  +void net()
+}
+Class Tablet{
+  -Tablet()
+  +void tab()
+}
+Class ServerRack{
+  +void servR()
+  -ServerRack()
+}
+Class ServerTower{
+  +void servTw()
+  -ServerTower()
+}
+ Desktop -- CreadorComputadora: <<friend>>
+Laptop -- CreadorComputadora: <<friend>>
+Netbook -- CreadorComputadora: <<friend>>
+Tablet--CreadorComputadora: <<friend>>
+ServerRack--CreadorComputadora: <<friend>>
+ServerTower--CreadorComputadora: <<friend>>
+Clonar <|-- Desktop
+Clonar <|-- Laptop
+Clonar <|-- Netbook
+Clonar <|-- Tablet
+Clonar <|-- ServerRack
+Clonar <|-- ServerTower
+Computadora <|.. Clonar
+CreadorComputadora *-- CreadorComputadora
+
+@enduml

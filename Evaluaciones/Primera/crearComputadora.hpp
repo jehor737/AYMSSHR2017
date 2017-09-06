@@ -44,12 +44,14 @@ public:
     std::cout << "Computador clonado" << '\n';
     return new SubClase(dynamic_cast<SubClase&>(*this));
   }
+protected:
+  Clonar(){}
 };
 
 class Desktop : public Clonar<Desktop>{
   friend class CreadorComputadora;
 public:
-  void hola()
+  void desk()
   {
     std::cout << "Desktop creada" << '\n';
   }
@@ -60,7 +62,7 @@ private:
 class Laptop : public Clonar<Laptop>{
 friend class CreadorComputadora;
 public:
-  void hola()
+  void lap()
   {
     std::cout << "Laptop creada" << '\n';
   }
@@ -71,7 +73,7 @@ private:
 class Netbook : public Clonar<Netbook>{
   friend class CreadorComputadora;
 public:
-  void hola()
+  void net()
   {
     std::cout << "Netbook creada" << '\n';
   }
@@ -82,7 +84,7 @@ private:
 class Tablet : public Clonar<Tablet>{
   friend class CreadorComputadora;
 public:
-  void hola()
+  void tab()
   {
     std::cout << "Tablet creada" << '\n';
   }
@@ -93,7 +95,7 @@ private:
 class ServerRack : public Clonar<ServerRack>{
   friend class CreadorComputadora;
 public:
-  void hola()
+  void servR()
   {
     std::cout << "Server Rack creado" << '\n';
   }
@@ -103,7 +105,7 @@ public:
 class ServerTower : public Clonar<ServerTower>{
   friend class CreadorComputadora;
 public:
-  void hola()
+  void servTw()
   {
     std::cout << "Server Tower creado" << '\n';
   }
