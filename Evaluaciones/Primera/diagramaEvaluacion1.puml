@@ -53,6 +53,7 @@ Netbook -- CreadorComputadora: <<friend>>
 Tablet--CreadorComputadora: <<friend>>
 ServerRack--CreadorComputadora: <<friend>>
 ServerTower--CreadorComputadora: <<friend>>
+Computadora--CreadorComputadora: <<friend>>
 Clonar <|-- Desktop
 Clonar <|-- Laptop
 Clonar <|-- Netbook
