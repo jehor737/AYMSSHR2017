@@ -1,96 +1,133 @@
+//Jesús Horacio Rojas Cortés A01020026
 #include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
 
-class Subject{
-  vector<Observer*> observadores;
-  string estado;
-public:
-  string getEstado(){ return estado; }
-  void setEstado(string n) {
-    estado = n;
-    for (vector<Observer*>::iterator it = observadores.begin() ; it != observadores.end(); ++it){
-      it->actualizacion();
-    }
-   }
-  void agregarObserver(Observer ob){
-    observadores.push_back(ob);
-  }
-};
-
 class Observer{
 protected:
-  vector<Subject *> sujetos;
+  string name;
 public:
-  virtual void actualizacion() = 0;
+  Observer () = default;
+  virtual void actualizacion(string a) = 0;
+};
+
+class Subject{
+protected:
+  vector<Observer*> observadores;
+  string name;
+public:
+  Subject() = default;
+  void notificacion() {
+    for (vector<Observer*>::iterator it = observadores.begin() ; it != observadores.end(); ++it){
+      (*it)->actualizacion(name);
+    }
+   }
+  void agregarObserver(Observer* ob){
+    observadores.push_back(ob);
+  }
+  void borrarObserver(Observer* ob){
+    //Iterate the observers, if found delete, alert if not
+    int i = 0;
+    for(vector<Observer*>::iterator it = observadores.begin(); it != observadores.end(); it++,i++ ){
+      if(observadores.at(i)==ob){
+        // erase the element
+        observadores.erase (observadores.begin()+i);
+        std::cout << "Observador eliminado" << '\n';
+        return;
+      }
+    }
+    std::cout << "¡Este observador no estaba suscrito!" << '\n';
+  }
 };
 
 class Trump : public Subject{
 public:
-
+  Trump(){
+    name = "Trump";
+  }
 };
 
 class EPN : public Subject{
-
+public:
+EPN(){
+  name = "EPN";
+  }
 };
 
 class LiderCoreano : public Subject{
-
+public:
+LiderCoreano()  {
+  name = "Kim Jong-Un";
+  }
 };
 
 class MVSNoticias : public Observer{
 
 public:
-  MVSNoticias(std::vector<Subject*> v)
+  MVSNoticias()
   {
-    sujetos = v;
-    
+    name = "MVS Noticias";
   }
-  void actualizacion()
+  void actualizacion(string a)
   {
-    for (vector<Observer*>::iterator it = sujetos.begin() ; it != sujetos.end(); ++it)
-      std::cout << it->getEstado() << '\n';
+      std::cout <<name + " nueva noticia de " + a<< '\n';
   }
 };
 class TelevisaNoticias : public Observer{
 public:
-  TelevisaNoticias(std::vector<Subject*> v)
+  TelevisaNoticias()
   {
-    sujetos = v;
+    name = "Televisa Noticias";
   }
-  void actualizacion()
+  void actualizacion(string a)
   {
-    for (vector<Observer*>::iterator it = sujetos.begin() ; it != sujetos.end(); ++it)
-      std::cout << it->getEstado() << '\n';
+      std::cout <<name + " nueva noticia de " + a<< '\n';
   }
 };
 class RadioRedNoticias : public Observer{
 public:
-  RadioRedNoticias(std::vector<Subject*> v)
+  RadioRedNoticias()
   {
-    sujetos = v;
+    name = "Radio Red";
   }
-  void actualizacion()
+  void actualizacion(string a)
   {
-    for (vector<Observer*>::iterator it = sujetos.begin() ; it != sujetos.end(); ++it)
-      std::cout << it->getEstado() << '\n';
+    std::cout <<name + " nueva noticia de " + a<< '\n';
   }
 };
 class NoticiasInternacionales : public Observer{
 public:
-  NoticiasInternacionales(std::vector<Subject*> v)
+  NoticiasInternacionales()
   {
-    sujetos = v;
+    name = "Noticias Internacionales";
   }
-  void actualizacion()
+  void actualizacion(string a)
   {
-    for (vector<Observer*>::iterator it = sujetos.begin() ; it != sujetos.end(); ++it)
-      std::cout << it->getEstado() << '\n';
+    std::cout <<name + " nueva noticia de " + a<< '\n';
   }
 };
 
 int main(int argc, char const *argv[]) {
+  Trump trump;
+  EPN pena;
+  LiderCoreano kim;
+  MVSNoticias * mvs = new MVSNoticias();
+  TelevisaNoticias * tele = new TelevisaNoticias();
+  RadioRedNoticias * radiored = new RadioRedNoticias();
+  NoticiasInternacionales * notiint = new NoticiasInternacionales();
+  trump.agregarObserver(mvs);
+  trump.agregarObserver(tele);
+  trump.agregarObserver(radiored);
+  trump.agregarObserver(notiint);
+  pena.agregarObserver(tele);
+  pena.agregarObserver(radiored);
+  kim.agregarObserver(notiint);
+  trump.notificacion();
+  pena.notificacion();
+  kim.notificacion();
+  trump.borrarObserver(mvs);
+  trump.notificacion();
 
   return 0;
 }
