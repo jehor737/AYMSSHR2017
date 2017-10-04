@@ -10,6 +10,7 @@ protected:
 public:
   Observer () = default;
   virtual void actualizacion(string a) = 0;
+  virtual ~Observer(){}
 };
 
 class Subject{
@@ -128,6 +129,10 @@ int main(int argc, char const *argv[]) {
   kim.notificacion();
   trump.borrarObserver(mvs);
   trump.notificacion();
+  delete mvs;
+  delete tele;
+  delete radiored;
+  delete notiint;
 
   return 0;
 }
