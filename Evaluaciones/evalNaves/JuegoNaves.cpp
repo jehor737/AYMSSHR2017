@@ -76,45 +76,48 @@ protected:
   int vida = 1;
 public:
   std::vector<FarAwayGalaxy*> galaxyElement;
-  Collection<FarAwayGalaxy*> observer;
+  Collection<FarAwayGalaxy*> observer;//Para iterator en el observer
   string name;
+  //Singleton de creación de objetos
   static FarAwayGalaxy* getInstance()
   {
     if(!instance)
       instance =  new FarAwayGalaxy;
     return instance;
   }
+  //factory method para crear objetos de diferente tipo
   template <class Item>
   Item* factoryMethod()
   {
     return new Item;
   }
+  //Métodos de posición de los objetos
   void quitVida() { vida = 0; }
   int getVida() { return vida; }
   void setPosX(int x) { posX = x; }
   void setPosY(int y) { posY = y; }
   int getPosX() { return posX; }
   int getPosY() { return posY; }
-  void moveInicial()
+  void moveInicial()//Dar primer lugar aleatorio
   {
     posX = (rand() % SIZE);
     posY = (rand() % SIZE);
     std::cout << "Position ("<< posX<<", "<< posY<<")" << '\n';
   }
-  void addObserver(FarAwayGalaxy* ob)
+  void addObserver(FarAwayGalaxy* ob)//Agregar al vector de
   {
     galaxyElement.push_back(ob);
   }
-
+  //notificación del observer
   void notificacion(int x, int y, Iterator<FarAwayGalaxy*> it, string name){
-    while(it.hasNext()) {
+    while(it.hasNext()) {//uso del iterator para el observer
         std::cout << "Mensaje para: "<< it.next()->name << '\n';
         std::cout << "Colisión en ("<<x<< ","<< y<<") de "<<name<< '\n';
     }
   }
 };
-FarAwayGalaxy* FarAwayGalaxy::instance = 0;
-
+FarAwayGalaxy* FarAwayGalaxy::instance = 0;//definir instancia
+//Clases que crean diferentes tipos de objetos del factory method
 class PlanetExplorationShip : public FarAwayGalaxy{
 friend class FarAwayGalaxy;
 private:
@@ -150,10 +153,10 @@ friend class FarAwayGalaxy;
 private:
   EarthAnalog(){name="Earth Analog"; moveInicial();}
 };
-
+//clase que controla el juego
 class Juego{
 private:
-  int tablero[SIZE][SIZE]={{0}};
+  int tablero[SIZE][SIZE]={{0}};//tablero
   int choque = -1;
   int total = 0;
   FarAwayGalaxy * galaxy;
@@ -168,14 +171,14 @@ private:
 public:
 
   void agregarATablero(FarAwayGalaxy* object){
-    if(tablero[object->getPosX()][object->getPosY()] != 0){
+    if(tablero[object->getPosX()][object->getPosY()] != 0){//dar un valor de inicio en el tablero
       object->setPosX((rand() % SIZE));
       object->setPosY((rand() % SIZE));
     }
     tablero[object->getPosX()][object->getPosY()]=object->getVida();
     std::cout << object->name << '\n';
-    galaxy->observer.addElement(object);
-    galaxy->addObserver(object);
+    galaxy->observer.addElement(object);//Agregar al collection
+    galaxy->addObserver(object);//Agregar al vector
   }
   void imprimeTablero(){
 			std::cout << "\n";
@@ -206,7 +209,7 @@ public:
      agregarATablero(ironMeteorite);
      agregarATablero(desertPlanet);
      agregarATablero(earthAnalog);
-     it = galaxy->observer.getIterator();
+     it = galaxy->observer.getIterator();//traer el iterator
      imprimeTablero();
   }
 
@@ -214,9 +217,9 @@ public:
     std::vector<FarAwayGalaxy*> object = galaxy->galaxyElement;
     for (size_t i = 0; i < object.size(); i++) {
       if (object.at(i)->getVida()) {
-        if (tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]==-1) {
-          object.at(i)->quitVida();
-          object.at(i)->notificacion(object.at(i)->getPosX(),object.at(i)->getPosY(),*it, object.at(i)->name);
+        if (tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]==-1) {//Si hay colisión entonces
+          object.at(i)->quitVida();//Quitar vida
+          object.at(i)->notificacion(object.at(i)->getPosX(),object.at(i)->getPosY(),*it, object.at(i)->name);//Notificar a todos con observer
           total++;
           break;
         }
@@ -251,12 +254,12 @@ public:
             break;
           }
           if (tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]==0) {
-            tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]=1;
+            tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]=1;//Mover si no hay colisión
           }
           else{
-            tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]=-1;
+            tablero[object.at(i)->getPosX()][object.at(i)->getPosY()]=-1;//Colocar que hubo colisión
             object.at(i)->quitVida();
-            object.at(i)->notificacion(object.at(i)->getPosX(),object.at(i)->getPosY(),*it, object.at(i)->name);
+            object.at(i)->notificacion(object.at(i)->getPosX(),object.at(i)->getPosY(),*it, object.at(i)->name);//Notificar a todos con observer
             total++;
           }
           std::cout << "Posicion final de "<<object.at(i)->name<<"("<< object.at(i)->getPosX()<<", "<<object.at(i)->getPosY()<<")" << '\n';
@@ -268,7 +271,7 @@ public:
 
   void iniciarJuego(){
     while (total < galaxy->galaxyElement.size()-1)
-        moverRandom();
+        moverRandom();//Mover a todos los objetos hasta que ya hayan chocado todos o ya no quede nada con qué chocar
     std::cout << "Ha terminado" << '\n';
   }
 };
